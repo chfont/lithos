@@ -1,0 +1,4 @@
+*.o
+*.bin
+#No backup files (from emacs)
+*~ 
