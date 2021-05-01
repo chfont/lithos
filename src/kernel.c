@@ -38,7 +38,7 @@ void kernel_main() {
   set_foreground(&term, VGA_LIGHT_GREEN);
   enable_interrupts();
   int3();
-  write(&term, "Welcome To Lithos:", 18);
+  terminal_write(&term, "Welcome To Lithos:", 18);
 }
 
 void init_gdt_entry(gdt_entry* entry, uint32_t limit, uint32_t base, uint8_t access,

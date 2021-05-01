@@ -19,17 +19,17 @@ void init_term(terminal* term) {
   }
 }
 
-void write(terminal* term, const char* s, size_t size) {
-  for (unsigned int i = 0; i < size; i++) {
-    uint64_t index = term->row * term->width + term->column;
-    switch (s[i]) {
-      case '\n':
-        term->column = 0;
+
+void terminal_write_char(terminal* term, char c){
+  uint64_t index = term->row * term->width + term->column;
+  switch (c){
+  case '\n':
+    term->column = 0;
         if (++(term->row) == term->height) {
           term->row = 0;
         }
         break;
-      case '\b':
+  case '\b':
         if (term->column == 0) {
           term->column = term->width - 1;
           if (term->row != 0) {
@@ -39,16 +39,21 @@ void write(terminal* term, const char* s, size_t size) {
           term->column--;
         }
         break;
-      default:
-        term->terminal_buffer[index] =
-            vga_char(s[i], vga_info(term->foreground_color, term->background_color));
-        if (++(term->column) == term->width) {
-          term->column = 0;
-          if (++(term->row) == term->height) {
-            term->row = 0;
-          }
-        }
+  default:
+    term->terminal_buffer[index] =
+    vga_char(c, vga_info(term->foreground_color, term->background_color));
+    if (++(term->column) == term->width) {
+      term->column = 0;
+      if (++(term->row) == term->height) {
+	term->row = 0;
+      }
     }
+  }
+}
+
+void terminal_write(terminal* term, const char* s, size_t size) {
+  for (unsigned int i = 0; i < size; i++) {
+    terminal_write_char(term, s[i]);
   }
 }
 

@@ -64,14 +64,13 @@ extern terminal term;
 void int_h(register_state state) {
   uint8_t color = term.foreground_color;
   set_foreground(&term, VGA_RED);
-  write(&term, "Received Interrupt: ", 20);
+  terminal_write(&term, "Received Interrupt: ", 20);
   char buf[10] = {0};
   if(itoa(state.interrupt_number, buf, 10)){
-    write(&term, "Invalid Interrupt Number\n", 26); //Sanity check, should never occur
+    terminal_write(&term, "Invalid Interrupt Number\n", 26); //Sanity check, should never occur
   } else {
-    int i = strlen(buf);
-    write(&term, buf, strlen(buf));
-    write(&term, "\n", 1);
+    terminal_write(&term, buf, strlen(buf));
+    terminal_write_char(&term, '\n');
   }
   set_foreground(&term, color);
 }

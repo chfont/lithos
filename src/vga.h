@@ -37,7 +37,8 @@ typedef struct terminal {
 } terminal;
 
 void init_term(terminal* term);
-void write(terminal* term, const char* s, size_t size);
+void terminal_write_char(terminal* term, char c);
+void terminal_write(terminal* term, const char* s, size_t size);
 void set_foreground(terminal* term, vga_color color);
 void set_background(terminal* term, vga_color color);
 
