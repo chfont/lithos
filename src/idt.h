@@ -20,4 +20,11 @@ typedef struct idt_entry {
 void init_idt_entry(idt_entry* entry, uint32_t addr, uint16_t segment, uint8_t flag);
 int init_idt_entries(idt_entry* entries, size_t count);
 
+// Structure to hold data needed in interrupt handling
+typedef struct register_state {
+  uint32_t ds;
+  uint32_t edi, esi, ebp, esp, ebx, edx, ecx, eax; // pusha instruction adds this
+  int32_t interrupt_number; // signed for use with itoa(), will never exceed 255
+  uint32_t error_code;
+} register_state;
 #endif

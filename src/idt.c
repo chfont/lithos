@@ -1,7 +1,8 @@
 #include "idt.h"
 #include <stddef.h>
 #include "vga.h"
-
+#include "itoa.h"
+#include "strlen.h"
 extern uint32_t int0;
 extern uint32_t int1;
 extern uint32_t int2;
@@ -60,9 +61,17 @@ int init_idt_entries(idt_entry* entries, size_t count) {
 
 extern terminal term;
 
-void int_h() {
+void int_h(register_state state) {
   uint8_t color = term.foreground_color;
   set_foreground(&term, VGA_RED);
-  write(&term, "Received Interrupt\n", 19);
+  write(&term, "Received Interrupt: ", 20);
+  char buf[10] = {0};
+  if(itoa(state.interrupt_number, buf, 10)){
+    write(&term, "Invalid Interrupt Number\n", 26); //Sanity check, should never occur
+  } else {
+    int i = strlen(buf);
+    write(&term, buf, strlen(buf));
+    write(&term, "\n", 1);
+  }
   set_foreground(&term, color);
 }
